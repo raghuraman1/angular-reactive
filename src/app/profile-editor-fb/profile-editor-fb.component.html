@@ -4,10 +4,16 @@
 
 <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class = "{{ (profileForm.controls.lastName.value != 'bob')?'grayout':'' }}" >
   
+  <label for="controlField"> ControlField:</label>
+  <div class="form-group" >
+  <input type="text" formControlName="controlField" >
+  <span *ngIf="!profileForm.controls.controlField.valid"  style="color: red">Error in controlField</span>
+</div>
+
   <label for="firstName"> First Name:</label>
     <div class="form-group" [ngClass]="displayFieldCss('firstName')" >
     <input type="text" formControlName="firstName" >
-    <span *ngIf="!profileForm.controls.firstName.valid && profileForm.controls.firstName.touched" style="color: red">Error</span>
+    <span *ngIf="!profileForm.controls.firstName.valid && profileForm.controls.firstName.touched" style="color: red">Error in firstName (touch sensitive)</span>
   </div>
   
 
