@@ -7,7 +7,7 @@
   <label for="firstName"> First Name:</label>
     <div class="form-group" [ngClass]="displayFieldCss('firstName')" >
     <input type="text" formControlName="firstName" >
-    <span *ngIf="!profileForm.controls.firstName.valid && profileForm.controls.firstName.touched">Error</span>
+    <span *ngIf="!profileForm.controls.firstName.valid && profileForm.controls.firstName.touched" style="color: red">Error</span>
   </div>
   
 
