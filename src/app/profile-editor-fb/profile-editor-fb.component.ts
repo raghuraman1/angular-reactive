@@ -20,25 +20,46 @@ export class ProfileEditorFBComponent implements OnInit {
       street: [''],
       city: [''],
       state: [''],
-      zip: ['']
+      country: [''],
+      zip: ['', [Validators.required, Validators.pattern(/^(\d{5}(-\d{4})?|[A-Z]\d[A-Z] *\d[A-Z]\d)$/)]]
     }),
     aliases: this.fb.array([
       this.fb.control('')
     ])
   });
+
+  countryNames = ['USA', 'Other'];
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
     this.controlFieldCtrl.statusChanges.subscribe((value: string) => {
 this.enableDisable();
     });
+    this.profileForm.controls.country.valueChanges.subscribe((value : string)=>{
+      this.onChangeOfCountry(value);
+    });
     this.enableDisable();
+    
+    
   }
 
   
 
 get aliases() {
   return this.profileForm.get('aliases') as FormArray;
+}
+
+onChangeOfCountry(value: string)
+{
+  if(value === 'USA')
+  {
+    //can also patch value for fields
+    this.profileForm.controls.zip.setValidators([Validators.required, Validators.pattern(/^(\d{5}(-\d{4})?|[A-Z]\d[A-Z] *\d[A-Z]\d)$/)]);
+  }
+  else{
+    this.profileForm.controls.zip.setValidators([Validators.required]);
+  }
+  this.profileForm.controls.zip.updateValueAndValidity();
 }
 
 enableDisable()

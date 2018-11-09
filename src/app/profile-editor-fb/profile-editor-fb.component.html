@@ -38,6 +38,14 @@
       State:
       <input type="text" formControlName="state">
     </label>
+
+    <label>
+     Country:
+     <select  formControlName="country">
+      <option *ngFor="let countryName of countryNames" [value]="countryName">{{countryName}}</option>
+    </select>
+     
+    </label>
   
     <label>
       Zip Code:
