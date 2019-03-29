@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { FormArray } from '@angular/forms';
 import { forbiddenNameValidator } from './forbidden-name.directive';
@@ -10,6 +10,7 @@ import { forbiddenNameValidator } from './forbidden-name.directive';
   styleUrls: ['./profile-editor-fb.component.css']
 })
 export class ProfileEditorFBComponent implements OnInit {
+  treatAsMultiple =false;
   controlFieldCtrl = this.fb.control('', Validators.required);
 
   profileForm = this.fb.group({
@@ -28,14 +29,27 @@ export class ProfileEditorFBComponent implements OnInit {
     ])
   });
 
-  countryNames = ['USA', 'Other'];
-  constructor(private fb: FormBuilder) { }
+  
+ 
 
+  countryNames = ['USA', 'Other', 'India'];
+  constructor(private fb: FormBuilder) { }
+  get address(): FormGroup {
+    return this.profileForm.get('address') as FormGroup;
+}
+
+isMultiple()
+{
+  return this.treatAsMultiple;
+}
   ngOnInit() {
+   
+    let addressFG: FormGroup= this.profileForm.get('address') as FormGroup;
     this.controlFieldCtrl.statusChanges.subscribe((value: string) => {
 this.enableDisable();
     });
-    this.profileForm.controls.country.valueChanges.subscribe((value : string)=>{
+    
+    addressFG.controls.country.valueChanges.subscribe((value : string)=>{
       this.onChangeOfCountry(value);
     });
     this.enableDisable();
@@ -51,15 +65,31 @@ get aliases() {
 
 onChangeOfCountry(value: string)
 {
-  if(value === 'USA')
+  console.log('value='+value);
+  let addressFG: FormGroup= this.profileForm.get('address') as FormGroup;
+  if(value.indexOf('USA')!==-1)
+  {
+console.log('is usa');
+this.treatAsMultiple=false;
+
+
+  }
+  else
+  {
+    console.log('is not usa');
+    this.treatAsMultiple=true;
+  }
+
+  let zipFG : FormGroup =this.profileForm.get('zip') as FormGroup;
+  /*if(value === 'USA')
   {
     //can also patch value for fields
-    this.profileForm.controls.zip.setValidators([Validators.required, Validators.pattern(/^(\d{5}(-\d{4})?|[A-Z]\d[A-Z] *\d[A-Z]\d)$/)]);
+    zipFG.setValidators([Validators.required, Validators.pattern(/^(\d{5}(-\d{4})?|[A-Z]\d[A-Z] *\d[A-Z]\d)$/)]);
   }
   else{
-    this.profileForm.controls.zip.setValidators([Validators.required]);
+    zipFG.setValidators([Validators.required]);
   }
-  this.profileForm.controls.zip.updateValueAndValidity();
+  zipFG.updateValueAndValidity();*/
 }
 
 enableDisable()
@@ -102,6 +132,8 @@ updateProfile() {
     address: {
       street: '123 Drew Street'
     }
+    
   });
+  
 }
 }

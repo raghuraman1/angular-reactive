@@ -41,7 +41,7 @@
 
     <label>
      Country:
-     <select  formControlName="country">
+     <select  formControlName="country" [multiple]="isMultiple()">
       <option *ngFor="let countryName of countryNames" [value]="countryName">{{countryName}}</option>
     </select>
      
